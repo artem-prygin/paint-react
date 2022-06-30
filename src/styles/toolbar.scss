@@ -1,0 +1,63 @@
+@import './variables';
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: $toolbar-height;
+    background-color: #fff;
+    box-shadow: 0 4px 5px gray;
+    z-index: 2;
+
+    &-btn {
+        margin: 0 10px;
+        width: 25px;
+        height: 25px;
+        border: none;
+        outline: none;
+        background-size: cover;
+        cursor: pointer;
+    }
+
+    .brush {
+        background: url('../assets/images/brush.png') no-repeat center center;
+    }
+
+    .circle {
+        background: url('../assets/images/circle.png') no-repeat center center;
+    }
+
+    .colors {
+        background: url('../assets/images/colors.png') no-repeat center center;
+    }
+
+    .eraser {
+        background: url('../assets/images/eraser.png') no-repeat center center;
+    }
+
+    .line {
+        background: url('../assets/images/line.png') no-repeat center center;
+    }
+
+    .rect {
+        background: url('../assets/images/rect.png') no-repeat center center;
+    }
+
+    .redo {
+        background: url('../assets/images/redo.png') no-repeat center center;
+    }
+
+    .save {
+        background: url('../assets/images/save.png') no-repeat center center;
+    }
+
+    .undo {
+        background: url('../assets/images/undo.png') no-repeat center center;
+    }
+}
+
+.setting-bar {
+    top: $toolbar-height;
+    z-index: 1;
+}
