@@ -28,10 +28,6 @@
         background: url('../assets/images/circle.png') no-repeat center center;
     }
 
-    .colors {
-        background: url('../assets/images/colors.png') no-repeat center center;
-    }
-
     .eraser {
         background: url('../assets/images/eraser.png') no-repeat center center;
     }
@@ -53,6 +49,7 @@
     }
 
     .undo {
+        margin-left: auto;
         background: url('../assets/images/undo.png') no-repeat center center;
     }
 }
