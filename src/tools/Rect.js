@@ -1,6 +1,6 @@
-import Tool from './Tool';
+import Tool from './Tool.js';
 
-export default class Circle extends Tool {
+export default class Rect extends Tool {
     constructor(canvas) {
         super(canvas);
         this.listen();
@@ -16,8 +16,9 @@ export default class Circle extends Tool {
         if (this.mouseDown) {
             const currentX = e.pageX - e.target.offsetLeft;
             const currentY = e.pageY - e.target.offsetTop;
-            const radius = Math.sqrt(Math.pow(currentX - this.startX, 2) + Math.pow(currentY - this.startY, 2));
-            this.draw(radius);
+            const width = currentX - this.startX;
+            const height = currentY - this.startY;
+            this.draw(width, height);
         }
     }
 
@@ -33,14 +34,14 @@ export default class Circle extends Tool {
         this.mouseDown = false;
     }
 
-    draw(radius) {
+    draw(width, height) {
         const img = new Image();
         img.src = this.savedImg;
         img.onload = () => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
             this.ctx.beginPath();
-            this.ctx.arc(this.startX, this.startY, radius, 0, Math.PI * 2);
+            this.ctx.rect(this.startX, this.startY, width, height);
             this.ctx.fill();
             this.ctx.stroke();
         }

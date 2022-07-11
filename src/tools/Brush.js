@@ -1,4 +1,4 @@
-import Tool from './Tool';
+import Tool from './Tool.js';
 
 export default class Brush extends Tool {
     constructor(canvas, socket, sessionID) {

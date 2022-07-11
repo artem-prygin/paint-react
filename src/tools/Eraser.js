@@ -1,4 +1,4 @@
-import Brush from './Brush';
+import Brush from './Brush.js';
 
 export default class Eraser extends Brush {
     constructor(canvas) {
