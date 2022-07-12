@@ -53,7 +53,7 @@
 //     // res.sendFile(indexPath);
 // });
 
-import express from 'express'
+const express = require('express')
 // import * as path from 'path';
 // import { fileURLToPath } from 'url';
 //
