@@ -5,11 +5,9 @@
   "type": "module",
   "scripts": {
     "prebuild": "rm -rf build",
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "server": "node index.js",
-    "server-dev": "nodemon index.js",
-    "postinstall": "npm run build && npm run server"
+    "start": "node index.js",
+    "server-dev": "nodemon index.js"
   },
   "dependencies": {
     "bootstrap": "^5.1.3",
