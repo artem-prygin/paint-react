@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "16.x"
+  },
+  "main": "index.js",
   "scripts": {
-    "prebuild": "rm -rf build",
-    "build": "react-scripts build",
     "start": "node index.js",
     "server-dev": "nodemon index.js"
   },

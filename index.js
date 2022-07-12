@@ -48,6 +48,7 @@ app.listen(PORT, () => {
 const indexPath = path.join(__dirname, 'build/index.html');
 
 app.get('*', (req, res) => {
-    console.log('sending index.html');
-    res.sendFile(indexPath);
+    res.send('test')
+    // console.log('sending index.html');
+    // res.sendFile(indexPath);
 });
