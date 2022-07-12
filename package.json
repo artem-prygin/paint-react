@@ -6,6 +6,7 @@
     "node": "16.x"
   },
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "server-dev": "nodemon index.js"
