@@ -11,41 +11,40 @@ const wsServer = WSServer(app);
 const aWss = wsServer.getWss();
 const PORT = process.env.PORT || 5000;
 
-// const connectionHandler = (ws, msg) => {
-//     ws.id = msg.id;
-//     broadcastConnection(ws, msg);
-// };
-//
-// const broadcastConnection = (ws, msg) => {
-//     aWss.clients.forEach((client) => {
-//         if (client.id === msg.id) {
-//             client.send(JSON.stringify(msg));
-//         }
-//     });
-// };
+const connectionHandler = (ws, msg) => {
+    ws.id = msg.id;
+    broadcastConnection(ws, msg);
+};
 
-// app.use(express.static('build'));
-//
-// app.ws('/', (ws, req) => {
-//     ws.on('message', (msg) => {
-//         const parsedMsg = JSON.parse(msg);
-//
-//         switch (parsedMsg.method) {
-//             case 'connection':
-//                 connectionHandler(ws, parsedMsg);
-//                 break;
-//             case 'draw':
-//                 broadcastConnection(ws, parsedMsg);
-//                 break;
-//         }
-//     });
-// });
+const broadcastConnection = (ws, msg) => {
+    aWss.clients.forEach((client) => {
+        if (client.id === msg.id) {
+            client.send(JSON.stringify(msg));
+        }
+    });
+};
+
+app.use(express.static('build'));
+
+app.ws('/', (ws, req) => {
+    ws.on('message', (msg) => {
+        const parsedMsg = JSON.parse(msg);
+
+        switch (parsedMsg.method) {
+            case 'connection':
+                connectionHandler(ws, parsedMsg);
+                break;
+            case 'draw':
+                broadcastConnection(ws, parsedMsg);
+                break;
+        }
+    });
+});
 
 const indexPath = path.join(__dirname, 'build/index.html');
 
 app.get('*', (req, res) => {
-    res.send('test')
-    // res.sendFile(indexPath);
+    res.sendFile(indexPath);
 });
 
 app.listen(PORT, () => {
