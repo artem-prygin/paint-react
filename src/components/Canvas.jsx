@@ -22,7 +22,7 @@ const Canvas = observer(() => {
     useEffect(() => {
         if (!canvasState.username) return;
 
-        const socket = new WebSocket('ws://localhost:5000');
+        const socket = new WebSocket('ws://paint-react-artempr.herokuapp.com/');
         canvasState.setSocket(socket);
         canvasState.setSessionID(sessionID);
         toolState.setTool(new Brush(canvasRef.current, socket, sessionID));
