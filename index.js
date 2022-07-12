@@ -1,5 +1,10 @@
 import express from 'express';
 import WSServer from 'express-ws';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const wsServer = WSServer(app);
@@ -19,6 +24,8 @@ const broadcastConnection = (ws, msg) => {
     });
 };
 
+app.use(express.static('build'));
+
 app.ws('/', (ws, req) => {
     ws.on('message', (msg) => {
         const parsedMsg = JSON.parse(msg);
@@ -34,7 +41,13 @@ app.ws('/', (ws, req) => {
     });
 });
 
-
 app.listen(PORT, () => {
     console.log(`Server started on PORT ${PORT}`);
+});
+
+const indexPath = path.join(__dirname, 'build/index.html');
+
+app.get('*', (req, res) => {
+    console.log('sending index.html');
+    res.sendFile(indexPath);
 });
