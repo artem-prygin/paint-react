@@ -1,5 +1,5 @@
 import express from 'express';
-import WSServer from 'express-ws';
+// import WSServer from 'express-ws';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -7,22 +7,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const wsServer = WSServer(app);
-const aWss = wsServer.getWss();
+// const wsServer = WSServer(app);
+// const aWss = wsServer.getWss();
 const PORT = process.env.PORT || 5000;
 
-const connectionHandler = (ws, msg) => {
-    ws.id = msg.id;
-    broadcastConnection(ws, msg);
-};
-
-const broadcastConnection = (ws, msg) => {
-    aWss.clients.forEach((client) => {
-        if (client.id === msg.id) {
-            client.send(JSON.stringify(msg));
-        }
-    });
-};
+// const connectionHandler = (ws, msg) => {
+//     ws.id = msg.id;
+//     broadcastConnection(ws, msg);
+// };
+//
+// const broadcastConnection = (ws, msg) => {
+//     aWss.clients.forEach((client) => {
+//         if (client.id === msg.id) {
+//             client.send(JSON.stringify(msg));
+//         }
+//     });
+// };
 
 // app.use(express.static('build'));
 //
