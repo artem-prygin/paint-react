@@ -1,32 +1,36 @@
 import express from 'express';
-import WSServer from 'express-ws';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { WebSocketServer } from 'ws';
+import * as http from 'http';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const wsServer = WSServer(app);
-const aWss = wsServer.getWss();
+const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
 const connectionHandler = (ws, msg) => {
-    ws.id = msg.id;
-    broadcastConnection(ws, msg);
+    ws.sessionID = msg.sessionID;
+    broadcastConnection(msg);
 };
 
-const broadcastConnection = (ws, msg) => {
-    aWss.clients.forEach((client) => {
-        if (client.id === msg.id) {
+const broadcastConnection = (msg) => {
+    wss.clients.forEach((client) => {
+        if (client.sessionID === msg.sessionID) {
             client.send(JSON.stringify(msg));
         }
     });
 };
 
-app.use(express.static('build'));
+const indexPath = path.join(__dirname, 'build/index.html');
 
-app.ws('/', (ws, req) => {
+const wss = new WebSocketServer({ server });
+
+wss.on('connection', (ws) => {
+    ws.on('error', console.error);
+
     ws.on('message', (msg) => {
         const parsedMsg = JSON.parse(msg);
 
@@ -35,18 +39,21 @@ app.ws('/', (ws, req) => {
                 connectionHandler(ws, parsedMsg);
                 break;
             case 'draw':
-                broadcastConnection(ws, parsedMsg);
+                broadcastConnection(parsedMsg);
                 break;
         }
     });
 });
 
-const indexPath = path.join(__dirname, 'build/index.html');
+app
+    .use(express.static('build'))
+    .get('/', (req, res) => {
+        res.sendFile(indexPath);
+    })
+    .get('/:id', (req, res) => {
+        res.sendFile(indexPath);
+    });
 
-app.get('*', (req, res) => {
-    res.sendFile(indexPath);
-});
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server started on PORT ${PORT}`);
 });
