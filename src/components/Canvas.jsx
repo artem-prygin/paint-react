@@ -47,7 +47,7 @@ const Canvas = observer(() => {
                 }
 
                 socket.send(JSON.stringify('1'));
-            }, 55000);
+            }, 10000);
 
             socket.send(JSON.stringify(data));
         };
