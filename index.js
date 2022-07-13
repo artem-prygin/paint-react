@@ -27,6 +27,11 @@ app.ws('/', (ws, req) => {
     ws.on('message', (msg) => {
         const parsedMsg = JSON.parse(msg);
 
+        if (typeof parsedMsg === 'number') {
+            ws.send('2');
+            return;
+        }
+
         switch (parsedMsg.method) {
             case 'connection':
                 connectionHandler(ws, parsedMsg);

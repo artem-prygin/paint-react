@@ -38,6 +38,15 @@ const Canvas = observer(() => {
                 method: 'connection',
             };
 
+            const pingPong = setInterval(() => {
+                if (socket.readyState !== 1) {
+                    clearInterval(pingPong);
+                    return;
+                }
+
+                socket.send(JSON.stringify('1'));
+            }, 55000);
+
             socket.send(JSON.stringify(data));
         };
 
