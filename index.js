@@ -5,7 +5,6 @@ import WSServer from 'express-ws';
 
 const app = express();
 const wsServer = WSServer(app);
-const aWss = wsServer.getWss();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const indexPath = path.join(__dirname, 'build/index.html');
@@ -17,25 +16,12 @@ const connectionHandler = (ws, msg) => {
 };
 
 const broadcastConnection = (msg) => {
-    aWss.clients.forEach((client) => {
+    wsServer.getWss().clients.forEach((client) => {
         if (client.sessionID === msg.sessionID) {
             client.send(JSON.stringify(msg));
         }
     });
 };
-
-if (process.env.NODE_ENV === 'production') {
-    app
-        .use(express.static('build'))
-        .get('/', (req, res) => {
-            res.sendFile(indexPath);
-        })
-        .get('/:id', (req, res) => {
-            res.sendFile(indexPath);
-        });
-}
-
-app.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));
 
 app.ws('/', (ws, req) => {
     ws.on('message', (msg) => {
@@ -53,3 +39,17 @@ app.ws('/', (ws, req) => {
 
     ws.on('error', console.error);
 });
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('build'));
+
+    app.get('/', (req, res) => {
+        res.sendFile(indexPath);
+    });
+
+    app.get('/:id', (req, res) => {
+        res.sendFile(indexPath);
+    });
+}
+
+app.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));
