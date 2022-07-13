@@ -1,12 +1,13 @@
 import Tool from './Tool.js';
 
 export default class Brush extends Tool {
-    constructor(canvas, socket, sessionID) {
-        super(canvas, socket, sessionID);
+    constructor(canvas, socket, sessionID, mouseDown) {
+        super(canvas, socket, sessionID, mouseDown);
         this.listen();
     }
 
     listen() {
+        super.onMouseOut();
         this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
         this.canvas.onmousedown = this.mouseDownHandler.bind(this);
         this.canvas.onmouseup = this.mouseUpHandler.bind(this);

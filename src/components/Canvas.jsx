@@ -7,6 +7,7 @@ import Brush from '../tools/Brush';
 import { Button, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
+const WS_LOCALHOST = 'ws://localhost:5000/';
 
 const Canvas = observer(() => {
     const canvasRef = useRef();
@@ -22,8 +23,10 @@ const Canvas = observer(() => {
     useEffect(() => {
         if (!canvasState.username) return;
 
-        const HOST = location.origin.replace(/^https/, 'wss')
-        const socket = new WebSocket(HOST);
+        const WS_HOST = process.env.NODE_ENV === 'production'
+            ? location.origin.replace(/^http/, 'ws')
+            : WS_LOCALHOST;
+        const socket = new WebSocket(WS_HOST);
         canvasState.setSocket(socket);
         canvasState.setSessionID(sessionID);
         toolState.setTool(new Brush(canvasRef.current, socket, sessionID));

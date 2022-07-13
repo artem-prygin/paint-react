@@ -1,8 +1,9 @@
 export default class Tool {
-    constructor(canvas, socket, sessionID) {
+    constructor(canvas, socket, sessionID, mouseDown) {
         this.canvas = canvas;
         this.socket = socket;
         this.sessionID = sessionID;
+        this.mouseDown = false;
         this.ctx = canvas.getContext('2d');
         this.destroyEvents();
     }
@@ -19,9 +20,17 @@ export default class Tool {
         this.ctx.lineWidth = width;
     }
 
+    disableMouseDown() {
+        this.mouseDown = false;
+    }
+
     destroyEvents() {
         this.canvas.onmousemove = null;
         this.canvas.onmousedown = null;
         this.canvas.onmouseup = null;
+    }
+
+    onMouseOut() {
+        this.canvas.onmouseout = this.disableMouseDown.bind(this);
     }
 }
