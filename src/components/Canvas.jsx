@@ -39,6 +39,8 @@ const Canvas = observer(() => {
             };
 
             const pingPong = setInterval(() => {
+                console.log(socket);
+
                 if (socket.readyState !== 1) {
                     clearInterval(pingPong);
                     return;
