@@ -27,7 +27,7 @@ app.ws('/', (ws, req) => {
     ws.on('message', (msg) => {
         const parsedMsg = JSON.parse(msg);
 
-        if (typeof parsedMsg === 'number') {
+        if (parsedMsg == 1) {
             ws.send('2');
             return;
         }
