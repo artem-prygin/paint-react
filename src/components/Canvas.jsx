@@ -6,32 +6,57 @@ import toolState from '../store/toolState';
 import Brush from '../tools/Brush';
 import { Button, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import Rect from '../tools/Rect.js';
+import axios from 'axios';
+import Circle from '../tools/Circle.js';
 
 const WS_LOCALHOST = 'ws://localhost:5000/';
 
 const Canvas = observer(() => {
     const canvasRef = useRef();
-    const [modalVisibility, setModalVisibility] = useState(true);
     const [username, setUsername] = useState('');
+    const [modalVisibility, setModalVisibility] = useState(true);
+    const [socket, setSocket] = useState(null);
     const { sessionID } = useParams();
 
     useEffect(() => {
         canvasState.setCanvas(canvasRef.current);
         toolState.setTool(new Brush(canvasRef.current));
+        axios.get(`http://localhost:5000/image?sessionID=${sessionID}`)
+            .then((res) => {
+                const img = new Image();
+                img.src = res.data;
+                img.onload = () => {
+                    const canvas = canvasRef.current;
+                    const ctx = canvas.getContext('2d');
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                };
+            })
+            .catch(console.error);
+
+        const usernameFromStorage = sessionStorage.getItem('username');
+        if (usernameFromStorage) {
+            setModalVisibility(false);
+            setUsername(usernameFromStorage);
+            canvasState.setUsername(usernameFromStorage);
+        }
     }, []);
 
     useEffect(() => {
-        if (!canvasState.username) return;
+        if (!canvasState.username || socket) return;
 
         const WS_HOST = process.env.NODE_ENV === 'production'
             ? location.origin.replace(/^http/, 'ws')
             : WS_LOCALHOST;
-        const socket = new WebSocket(WS_HOST);
-        canvasState.setSocket(socket);
-        canvasState.setSessionID(sessionID);
-        toolState.setTool(new Brush(canvasRef.current, socket, sessionID));
 
-        socket.onopen = () => {
+        const ws = new WebSocket(WS_HOST);
+        setSocket(ws);
+        canvasState.setSessionID(sessionID);
+        canvasState.setSocket(ws);
+        toolState.setTool(new Brush(canvasRef.current, ws, sessionID));
+
+        ws.onopen = () => {
             const data = {
                 sessionID,
                 username: canvasState.username,
@@ -39,18 +64,18 @@ const Canvas = observer(() => {
             };
 
             const pingPong = setInterval(() => {
-                if (socket.readyState !== 1) {
+                if (ws.readyState !== 1) {
                     clearInterval(pingPong);
                     return;
                 }
 
-                socket.send('1');
+                ws.send('1');
             }, 10000);
 
-            socket.send(JSON.stringify(data));
+            ws.send(JSON.stringify(data));
         };
 
-        socket.onmessage = (e) => {
+        ws.onmessage = (e) => {
             const msg = JSON.parse(e.data);
 
             switch (msg.method) {
@@ -60,17 +85,24 @@ const Canvas = observer(() => {
                 case 'draw':
                     drawHandler(msg);
                     break;
+                default:
+                    break;
             }
         };
     }, [canvasState.username]);
 
-    const mouseDownHandler = () => {
-        canvasState.pushToUndo(canvasRef.current.toDataURL());
+    const mouseUpHandler = () => {
+        const image = canvasRef.current.toDataURL();
+        canvasState.pushToUndo(image);
+        axios.post(`http://localhost:5000/image?sessionID=${sessionID}`, { image })
+            .then(() => console.log('success'))
+            .catch(console.error);
     };
 
     const connectionHandler = () => {
-        canvasState.setUsername(username);
         setModalVisibility(false);
+        sessionStorage.setItem('username', username);
+        canvasState.setUsername(username);
     };
 
     const drawHandler = (msg) => {
@@ -81,6 +113,14 @@ const Canvas = observer(() => {
             case 'brush':
                 Brush.draw(ctx, figure);
                 break;
+            case 'rect':
+                Rect.staticDraw(ctx, figure);
+                ctx.beginPath();
+                break;
+            case 'circle':
+                Circle.staticDraw(ctx, figure);
+                ctx.beginPath();
+                break;
             case 'finish':
                 ctx.beginPath();
                 break;
@@ -89,9 +129,7 @@ const Canvas = observer(() => {
 
     return (
         <div className="canvas">
-            <Modal show={modalVisibility}
-                   onHide={() => {
-                   }}>
+            <Modal show={modalVisibility}>
                 <Modal.Header>
                     <Modal.Title>Type your name</Modal.Title>
                 </Modal.Header>
@@ -109,7 +147,7 @@ const Canvas = observer(() => {
                 </Modal.Footer>
             </Modal>
 
-            <canvas onMouseDown={() => mouseDownHandler()}
+            <canvas onMouseUp={() => mouseUpHandler()}
                     ref={canvasRef}
                     width={1000}
                     height={600}/>

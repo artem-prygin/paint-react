@@ -50,6 +50,15 @@ const Toolbar = () => {
         }
     }
 
+    const saveImage = () => {
+        const a = document.createElement('a');
+        a.href = canvasState.canvas.toDataURL();
+        a.download = `${canvasState.sessionID}.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
     return (
         <div className="toolbar">
             { tools.map((t, index) => (
@@ -68,7 +77,8 @@ const Toolbar = () => {
                     onClick={() => canvasState.redo()}>
                 <RedoImg/>
             </button>
-            <button className="toolbar-btn save">
+            <button className="toolbar-btn save"
+                    onClick={() => saveImage()}>
                 <SaveImg/>
             </button>
         </div>

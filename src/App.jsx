@@ -8,13 +8,14 @@ const App = () => {
         <BrowserRouter>
             <div className="app">
                 <Routes>
-                    <Route path="/:sessionID" element={<Content/>}/>
-                    <Route path="/" element={<Navigate to={Date.now().toString(16)}/>}/>
+                    <Route path="/:sessionID"
+                           element={<Content/>}/>
+                    <Route path="/"
+                           element={<Navigate to={Date.now().toString(16)}/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
-
-    )
-}
+    );
+};
 
 export default App;
