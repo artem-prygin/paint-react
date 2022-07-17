@@ -1,11 +1,34 @@
+import canvasState from '../store/canvasState.js';
+import * as apiRequests from '../api/api.js';
+
 export default class Tool {
-    constructor(canvas, socket, sessionID, mouseDown) {
+    constructor(canvas, socket, sessionID) {
         this.canvas = canvas;
         this.socket = socket;
         this.sessionID = sessionID;
         this.mouseDown = false;
         this.ctx = canvas.getContext('2d');
         this.destroyEvents();
+    }
+
+    listen() {
+        this.canvas.onmouseout = this.disableMouseDown.bind(this);
+        this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
+        this.canvas.onmousedown = this.mouseDownHandler.bind(this);
+        this.canvas.onmouseup = this.mouseUpHandler.bind(this);
+    }
+
+    mouseMoveHandler(e) {
+    }
+
+    mouseDownHandler(e) {
+        const image = this.canvas.toDataURL();
+        canvasState.pushToUndo(image);
+    }
+
+    mouseUpHandler(e) {
+        const image = this.canvas.toDataURL();
+        apiRequests.saveImage(image, this.sessionID);
     }
 
     set fillColor(color) {
@@ -30,7 +53,8 @@ export default class Tool {
         this.canvas.onmouseup = null;
     }
 
-    onMouseOut() {
-        this.canvas.onmouseout = this.disableMouseDown.bind(this);
+    dropCurrentXY() {
+        this.currentX = null;
+        this.currentY = null;
     }
 }

@@ -3,26 +3,21 @@ import Tool from './Tool.js';
 export default class Rect extends Tool {
     constructor(canvas, socket, sessionID, mouseDown) {
         super(canvas, socket, sessionID, mouseDown);
-        this.listen();
-    }
-
-    listen() {
-        this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
-        this.canvas.onmousedown = this.mouseDownHandler.bind(this);
-        this.canvas.onmouseup = this.mouseUpHandler.bind(this);
+        super.listen();
     }
 
     mouseMoveHandler(e) {
         if (this.mouseDown) {
-            const currentX = e.pageX - e.target.offsetLeft;
-            const currentY = e.pageY - e.target.offsetTop;
-            this.width = currentX - this.startX;
-            this.height = currentY - this.startY;
+            this.currentX = e.pageX - e.target.offsetLeft;
+            this.currentY = e.pageY - e.target.offsetTop;
+            this.width = this.currentX - this.startX;
+            this.height = this.currentY - this.startY;
             this.draw();
         }
     }
 
     mouseDownHandler(e) {
+        super.mouseDownHandler();
         this.mouseDown = true;
         this.ctx.beginPath();
         this.startX = e.pageX - e.target.offsetLeft;
@@ -32,6 +27,13 @@ export default class Rect extends Tool {
 
     mouseUpHandler(e) {
         this.mouseDown = false;
+
+        if (this.currentX == null || this.currentY == null) {
+            return;
+        }
+
+        super.mouseUpHandler();
+
         const msg = {
             method: 'draw',
             sessionID: this.sessionID,
@@ -47,6 +49,7 @@ export default class Rect extends Tool {
             },
         };
         this.socket.send(JSON.stringify(msg));
+        this.dropCurrentXY();
     }
 
     draw() {

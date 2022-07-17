@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+import * as apiRequests from '../api/api.js';
 
 class CanvasState {
     canvas = null;
@@ -9,7 +10,15 @@ class CanvasState {
     sessionID = null;
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
+    }
+
+    clearData() {
+        this.undoList = [];
+        this.redoList = [];
+        this.sessionID = null;
+        this.socket.close();
+        this.socket = null;
     }
 
     setSocket(socket) {
@@ -37,11 +46,7 @@ class CanvasState {
             const dataUrl = this.undoList.pop();
             this.redoList.push(this.canvas.toDataURL());
             this.drawImage(dataUrl);
-            return;
         }
-
-        const ctx = this.canvas.getContext('2d');
-        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     redo() {
@@ -59,7 +64,8 @@ class CanvasState {
         img.onload = () => {
             ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
-        }
+            apiRequests.saveImage(this.canvas.toDataURL(), this.sessionID);
+        };
     }
 }
 

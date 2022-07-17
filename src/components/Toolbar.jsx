@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/toolbar.scss';
 import toolState from '../store/toolState';
 import canvasState from '../store/canvasState';
@@ -25,6 +25,10 @@ const Toolbar = () => {
         { name: 'eraser', svg: <EraserImg/> },
         { name: 'line', svg: <LineImg/> },
     ];
+
+    useEffect(() => {
+        setTool('brush');
+    }, [canvasState.sessionID])
 
     const setStateTool = (tool) => {
         setTool(tool);

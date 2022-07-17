@@ -3,13 +3,7 @@ import Tool from './Tool.js';
 export default class Circle extends Tool {
     constructor(canvas, socket, sessionID, mouseDown) {
         super(canvas, socket, sessionID, mouseDown);
-        this.listen();
-    }
-
-    listen() {
-        this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
-        this.canvas.onmousedown = this.mouseDownHandler.bind(this);
-        this.canvas.onmouseup = this.mouseUpHandler.bind(this);
+        super.listen();
     }
 
     mouseMoveHandler(e) {
@@ -22,6 +16,7 @@ export default class Circle extends Tool {
     }
 
     mouseDownHandler(e) {
+        super.mouseDownHandler();
         this.mouseDown = true;
         this.ctx.beginPath();
         this.startX = e.pageX - e.target.offsetLeft;
@@ -32,6 +27,12 @@ export default class Circle extends Tool {
     mouseUpHandler(e) {
         this.mouseDown = false;
 
+        if (this.currentX == null || this.currentY == null) {
+            return;
+        }
+
+        super.mouseUpHandler();
+
         const radius = Math.sqrt(Math.pow(this.currentX - this.startX, 2) + Math.pow(this.currentY - this.startY, 2));
         const msg = {
             method: 'draw',
@@ -40,8 +41,6 @@ export default class Circle extends Tool {
                 type: 'circle',
                 x: this.startX,
                 y: this.startY,
-                width: this.width,
-                height: this.height,
                 fillStyle: this.ctx.fillStyle,
                 strokeStyle: this.ctx.strokeStyle,
                 lineWidth: this.ctx.lineWidth,
@@ -49,6 +48,7 @@ export default class Circle extends Tool {
             },
         };
         this.socket.send(JSON.stringify(msg));
+        this.dropCurrentXY();
     }
 
     draw(radius) {
@@ -65,8 +65,6 @@ export default class Circle extends Tool {
     }
 
     static staticDraw(ctx, figure) {
-        console.log('here');
-
         ctx.fillStyle = figure.fillStyle;
         ctx.strokeStyle = figure.strokeStyle;
         ctx.lineWidth = figure.lineWidth;

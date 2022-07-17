@@ -48,7 +48,7 @@ app.ws('/', (ws, req) => {
 });
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '1000kb' }));
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('build'));
@@ -65,8 +65,9 @@ if (process.env.NODE_ENV === 'production') {
 app.post('/image', (req, res) => {
     try {
         const data = req.body.image.split(';base64,')[1];
-        fs.writeFileSync(path.resolve(__dirname, 'files', `${req.query.sessionID}.jpg`), data, 'base64')
-        return res.status(200).json('загружено')
+        const imagePath = path.resolve(__dirname, 'files', `${req.query.sessionID}.jpg`);
+        fs.writeFileSync(imagePath, data, 'base64');
+        return res.status(200).json('loaded successfully');
     } catch (e) {
         res.status(500).json('error');
         console.log(e.message);
@@ -75,7 +76,11 @@ app.post('/image', (req, res) => {
 
 app.get('/image', (req, res) => {
     try {
-        const image = fs.readFileSync(path.resolve(__dirname, 'files', `${req.query.sessionID}.jpg`));
+        const imagePath = path.resolve(__dirname, 'files', `${req.query.sessionID}.jpg`);
+        if (!fs.existsSync(imagePath)) {
+            return res.status(200).json('file doesn\'t exist');
+        }
+        const image = fs.readFileSync(imagePath);
         const data = `data:image/png;base64,${image.toString('base64')}`;
         res.json(data);
     } catch (e) {
