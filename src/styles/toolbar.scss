@@ -28,7 +28,6 @@
                 fill: red;
             }
         }
-
     }
 }
 
@@ -64,4 +63,11 @@
     &-active, &:hover {
         opacity: 1;
     }
+}
+
+.langs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }

@@ -90,7 +90,7 @@ const Toolbar = () => {
                 </button>
             ))}
 
-            <div className="m-auto">
+            <div className="langs">
                 <button className={`lang-btn ${lang === 'ru' ? 'lang-btn-active' : ''}`}
                         onClick={() => changeLanguage('ru')}>
                     <img src={ru}/>
