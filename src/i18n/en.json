@@ -1,0 +1,16 @@
+{
+  "SorryThisServiceIsAvailableForSmallScreens": "Sorry, this service is available only for 1440px screens and more",
+  "ClearCanvas": "Clear Canvas",
+  "SendMessage": "Send Message",
+  "StartNewSession": "Start new session",
+  "AreYouSureYouWantToStartNewSession": "Are you sure you want to start new session?",
+  "Cancel": "Cancel",
+  "YouСanAlwaysReturnToCurrentSessionViaThisLink": "You can always return to current canvas using this link",
+  "TypeYourName": "Type your name",
+  "LogIn": "Log in",
+  "HasJoined": "has joined",
+  "HasLeft": "has left",
+  "LineWidth": "Line width",
+  "LineColor": "Line color",
+  "FillColor": "Fill color"
+}

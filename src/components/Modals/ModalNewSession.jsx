@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import canvasState from '../../store/canvasState';
+import generalState from '../../store/generalState';
 import { Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const LOCALHOST = 'http://localhost:3000';
 const BASE_URL = process.env.NODE_ENV === 'production'
@@ -11,6 +13,7 @@ const BASE_URL = process.env.NODE_ENV === 'production'
 const ModalNewSession = () => {
     const [modal, setModal] = useState(false);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const startNewSession = () => {
         setModal(false);
@@ -18,6 +21,7 @@ const ModalNewSession = () => {
         const ctx = canvasState.canvas.getContext('2d');
         ctx.clearRect(0, 0, canvasState.canvas.width, canvasState.canvas.height);
         canvasState.clearData();
+        generalState.clearData();
         navigate(`/${Date.now().toString(16)}`);
     };
 
@@ -25,26 +29,26 @@ const ModalNewSession = () => {
         <>
             <button className="btn btn-danger btn-sm ml-5 mr-5"
                     onClick={() => setModal(true)}>
-                Start new session
+                {t('StartNewSession')}
             </button>
 
             <Modal show={modal}
                    onHide={() => setModal(false)}>
                 <Modal.Header>
-                    <Modal.Title>Are you sure you want to start new session?</Modal.Title>
+                    <Modal.Title> {t('AreYouSureYouWantToStartNewSession')}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <span>You can always return to current canvas using this link:</span>
-                    <h6 className="bold">{`${BASE_URL}/${canvasState.sessionID}`}</h6>
+                    <span>{t('YouСanAlwaysReturnToCurrentSessionViaThisLink')}:</span>
+                    <span className="bold">{` ${BASE_URL}/${generalState.sessionID}`}</span>
                 </Modal.Body>
                 <Modal.Footer className="justify-between">
                     <Button variant="secondary"
                             onClick={() => setModal(false)}>
-                        Cancel
+                        {t('Cancel')}
                     </Button>
 
                     <Button variant="danger" onClick={() => startNewSession()}>
-                        Start new session
+                        {t('StartNewSession')}
                     </Button>
                 </Modal.Footer>
             </Modal>

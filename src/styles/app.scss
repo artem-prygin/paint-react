@@ -45,13 +45,13 @@
     right: 5px;
     width: 250px;
     color: #fff;
-    background: #bb2d3b;
+    background: $danger;
     padding: 10px;
     z-index: 3;
     animation: fadeOut 5s forwards;
 
     &__new {
-        background: #198754;
+        background: $success;
     }
 }
 

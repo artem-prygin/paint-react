@@ -1,0 +1,16 @@
+{
+  "SorryThisServiceIsAvailableForSmallScreens": "Извините, данный сервис доступен только на экранах с разрешением от 1440 пикселей и выше",
+  "ClearCanvas": "Очистить канвас",
+  "SendMessage": "Отправить сообщение",
+  "StartNewSession": "Начать новую сессию",
+  "AreYouSureYouWantToStartNewSession": "Вы уверены, что хотите начать новую сессию?",
+  "Cancel": "Отмена",
+  "YouСanAlwaysReturnToCurrentSessionViaThisLink": "Вы всегда сможете вернуться к текущей сессии по этой ссылке",
+  "TypeYourName": "Введите своё имя",
+  "LogIn": "Войти",
+  "HasJoined:": "присоединился к нам",
+  "HasLeft": "покинул нас",
+  "LineWidth": "Ширина линии",
+  "LineColor": "Цвет линии",
+  "FillColor": "Цвет заливки"
+}

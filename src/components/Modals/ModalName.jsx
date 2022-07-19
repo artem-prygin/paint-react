@@ -1,31 +1,33 @@
 import React, { useState } from 'react';
-import canvasState from '../../store/canvasState';
+import generalState from '../../store/generalState';
 import { Button, Modal } from 'react-bootstrap';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ModalName = () => {
     const [modalVisibility, setModalVisibility] = useState(true);
     const [username, setUsername] = useState('');
+    const { t } = useTranslation();
 
     useEffect(() => {
         const usernameFromStorage = localStorage.getItem('username');
         if (usernameFromStorage) {
             setModalVisibility(false);
             setUsername(usernameFromStorage);
-            canvasState.setUsername(usernameFromStorage);
+            generalState.setUsername(usernameFromStorage);
         }
     }, []);
 
     const connectionHandler = () => {
         setModalVisibility(false);
         localStorage.setItem('username', username);
-        canvasState.setUsername(username);
+        generalState.setUsername(username);
     };
 
     return (
         <Modal show={modalVisibility}>
             <Modal.Header>
-                <Modal.Title>Type your name</Modal.Title>
+                <Modal.Title>{t('TypeYourName')}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <input onChange={(e) => setUsername(e.target.value)}
@@ -36,7 +38,7 @@ const ModalName = () => {
                 <Button variant="success"
                         disabled={username.length === 0}
                         onClick={() => connectionHandler()}>
-                    Log in
+                    {t('LogIn')}
                 </Button>
             </Modal.Footer>
         </Modal>

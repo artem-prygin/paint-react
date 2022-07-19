@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../styles/toolbar.scss';
 import toolState from '../store/toolState';
 import arrow from '../assets/arrow.svg';
 import canvasState from '../store/canvasState.js';
+import generalState from '../store/generalState.js';
 import * as apiRequests from '../api/api.js';
 import { sendWebSocket } from '../api/websocket.js';
 import ModalNewSession from './Modals/ModalNewSession.jsx';
+import { useTranslation } from 'react-i18next';
 
 const SettingBar = () => {
     const [lineWidth, setLineWidth] = useState(1);
     const [newSessionModal, setNewSessionModal] = useState(false);
+    const { t } = useTranslation();
 
     const changeLineWidth = (num) => {
         if (lineWidth + num < 1 || lineWidth + num > 20) {
@@ -29,14 +31,15 @@ const SettingBar = () => {
             method: 'clearCanvas',
         };
         sendWebSocket(msg);
-        apiRequests.saveImage(canvasState.canvas.toDataURL(), canvasState.sessionID);
+        apiRequests.saveImage(canvasState.canvas.toDataURL(), generalState.sessionID);
     };
 
     return (
         <>
-            {newSessionModal && <ModalNewSession newSessionModal={newSessionModal} setNewSessionModal={setNewSessionModal}/>}
+            {newSessionModal && <ModalNewSession newSessionModal={newSessionModal}
+                                                 setNewSessionModal={setNewSessionModal}/>}
             <div className="toolbar setting-bar">
-                <label className="ml-10">Line Width:</label>
+                <label className="ml-10">{t('LineWidth')}:</label>
 
                 <div className="line-width ml-5">
                     <img className="arrow"
@@ -51,14 +54,14 @@ const SettingBar = () => {
                 </div>
 
                 <label className="ml-10"
-                       htmlFor="stroke-color">Line Color:</label>
+                       htmlFor="stroke-color">{t('LineColor')}:</label>
                 <input onChange={(e) => toolState.setStrokeColor(e.target.value)}
                        type="color"
                        className="ml-5 pointer"
                        id="stroke-color"/>
 
                 <label className="ml-10"
-                       htmlFor="fill-color">Fill Color:</label>
+                       htmlFor="fill-color">{t('FillColor')}:</label>
                 <input onChange={(e) => toolState.setFillColor(e.target.value)}
                        className="ml-5 pointer"
                        type="color"
@@ -66,7 +69,7 @@ const SettingBar = () => {
 
                 <button className="btn btn-warning btn-sm ml-auto"
                         onClick={() => clearCanvas()}>
-                    Clear canvas
+                    {t('ClearCanvas')}
                 </button>
 
                 <ModalNewSession/>

@@ -1,4 +1,5 @@
 import canvasState from '../store/canvasState.js';
+import generalState from '../store/generalState.js';
 import Rect from '../tools/Rect.js';
 import Circle from '../tools/Circle.js';
 import Line from '../tools/Line.js';
@@ -6,23 +7,23 @@ import Brush from '../tools/Brush.js';
 import Eraser from '../tools/Eraser.js';
 import chatMessagesState from '../store/chatMessagesState.js';
 
-const WS_LOCALHOST = 'ws://localhost:5000/';
+const WS_LOCALHOST = 'ws://localhost:9999/';
 const WS_HOST = process.env.NODE_ENV === 'production'
     ? location.origin.replace(/^http/, 'ws')
     : WS_LOCALHOST;
 
 export const openWebSocket = (canvas, sessionID) => {
     const ws = new WebSocket(WS_HOST);
-    canvasState.setSocket(ws);
+    generalState.setSocket(ws);
 
-    const userID = `${canvasState.username}_${sessionID}_${Math.round(Math.random() * 10000)}`;
-    canvasState.setUserID(userID);
+    const userID = `${generalState.username}_${sessionID}_${Math.round(Math.random() * 10000)}`;
+    generalState.setUserID(userID);
 
     ws.onopen = () => {
         const data = {
             sessionID,
             userID,
-            username: canvasState.username,
+            username: generalState.username,
             method: 'connection',
         };
 
@@ -50,7 +51,7 @@ const wsOnMessage = (ws, canvas) => {
         switch (msg.method) {
             case 'connection':
                 console.log(`User ${msg.username} has logged in`);
-                canvasState.addUser(msg);
+                generalState.addUser(msg);
                 break;
             case 'draw':
                 drawHandler(msg, canvas);
@@ -72,7 +73,7 @@ const wsOnMessage = (ws, canvas) => {
                 chatMessagesState.addMessageFromSocket(msg);
                 break;
             case 'closedConnection':
-                canvasState.addUser(msg);
+                generalState.addUser(msg);
                 break;
             default:
                 break;
@@ -117,9 +118,9 @@ export const sendWebSocket = (msg) => {
 
     const msgWithIDs = {
         ...msg,
-        userID: canvasState.userID,
-        sessionID: canvasState.sessionID,
-        username: canvasState.username,
+        userID: generalState.userID,
+        sessionID: generalState.sessionID,
+        username: generalState.username,
     };
-    canvasState.socket.send(JSON.stringify(msgWithIDs));
+    generalState.socket.send(JSON.stringify(msgWithIDs));
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import '../styles/canvas.scss';
 import { observer } from 'mobx-react-lite';
 import canvasState from '../store/canvasState';
+import generalState from '../store/generalState';
 import toolState from '../store/toolState';
 import * as apiRequests from '../api/api.js';
 import { openWebSocket } from '../api/websocket.js';
@@ -18,16 +19,16 @@ const Canvas = observer(() => {
         }
 
         toolState.setTool(new Brush());
-        apiRequests.getImage(canvasRef.current, canvasState.sessionID);
-    }, [canvasState.socket]);
+        apiRequests.getImage(canvasRef.current, generalState.sessionID);
+    }, [generalState.socket]);
 
     useEffect(() => {
-        if (!canvasState.username || canvasState.socket) {
+        if (!generalState.username || generalState.socket) {
             return;
         }
 
-        openWebSocket(canvasRef.current, canvasState.sessionID)
-    }, [canvasState.username, canvasState.socket]);
+        openWebSocket(canvasRef.current, generalState.sessionID)
+    }, [generalState.username, generalState.socket]);
 
     return (
         <div className="canvas">

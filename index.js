@@ -10,7 +10,7 @@ const wsServer = WSServer(app);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const indexPath = path.join(__dirname, 'build/index.html');
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 9999;
 
 const connectionHandler = (ws, msg) => {
     ws.sessionID = msg.sessionID;

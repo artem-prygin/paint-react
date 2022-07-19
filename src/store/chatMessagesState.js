@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import canvasState from './canvasState.js';
+import generalState from './generalState.js';
 
 class ChatMessagesState {
     chatMessages = [];
@@ -11,7 +11,8 @@ class ChatMessagesState {
     addMessage(chatMessage) {
         this.chatMessages.push({
             chatMessage,
-            username: canvasState.username,
+            username: generalState.username,
+            userID: generalState.userID,
         });
     }
 
@@ -19,6 +20,7 @@ class ChatMessagesState {
         this.chatMessages.push({
             chatMessage: chatMessageObj.chatMessage,
             username: chatMessageObj.username,
+            userID: chatMessageObj.userID,
         });
     }
 }

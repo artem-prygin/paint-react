@@ -1,4 +1,5 @@
 import canvasState from '../store/canvasState.js';
+import generalState from '../store/generalState.js';
 import * as apiRequests from '../api/api.js';
 
 export default class Tool {
@@ -25,7 +26,7 @@ export default class Tool {
 
     mouseUpHandler(e) {
         const image = canvasState.canvas.toDataURL();
-        apiRequests.saveImage(image, canvasState.sessionID);
+        apiRequests.saveImage(image, generalState.sessionID);
     }
 
     set fillColor(color) {

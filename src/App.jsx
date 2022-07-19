@@ -6,6 +6,7 @@ import Content from './components/Content';
 const App = () => {
     const sessionID = localStorage.getItem('sessionID');
 
+
     return (
         <BrowserRouter>
             <div className="app">
