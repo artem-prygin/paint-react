@@ -3,9 +3,9 @@ import '../styles/canvas.scss';
 import { observer } from 'mobx-react-lite';
 import canvasState from '../store/canvasState';
 import toolState from '../store/toolState';
-import Brush from '../tools/Brush';
 import * as apiRequests from '../api/api.js';
 import { openWebSocket } from '../api/websocket.js';
+import Brush from '../tools/Brush.js';
 
 const Canvas = observer(() => {
     const canvasRef = useRef();
@@ -17,7 +17,7 @@ const Canvas = observer(() => {
             return;
         }
 
-        toolState.setTool(new Brush(canvasRef.current, canvasState.socket, canvasState.sessionID));
+        toolState.setTool(new Brush());
         apiRequests.getImage(canvasRef.current, canvasState.sessionID);
     }, [canvasState.socket]);
 

@@ -1,8 +1,10 @@
 import Tool from './Tool.js';
+import { sendWebSocket } from '../api/websocket.js';
+import canvasState from '../store/canvasState.js';
 
 export default class Circle extends Tool {
-    constructor(canvas, socket, sessionID, mouseDown) {
-        super(canvas, socket, sessionID, mouseDown);
+    constructor(mouseDown) {
+        super(mouseDown);
         super.listen();
     }
 
@@ -21,7 +23,7 @@ export default class Circle extends Tool {
         this.ctx.beginPath();
         this.startX = e.pageX - e.target.offsetLeft;
         this.startY = e.pageY - e.target.offsetTop;
-        this.savedImg = this.canvas.toDataURL();
+        this.savedImg = canvasState.canvas.toDataURL();
     }
 
     mouseUpHandler(e) {
@@ -36,7 +38,6 @@ export default class Circle extends Tool {
         const radius = Math.sqrt(Math.pow(this.currentX - this.startX, 2) + Math.pow(this.currentY - this.startY, 2));
         const msg = {
             method: 'draw',
-            sessionID: this.sessionID,
             figure: {
                 type: 'circle',
                 x: this.startX,
@@ -47,7 +48,7 @@ export default class Circle extends Tool {
                 radius,
             },
         };
-        this.socket.send(JSON.stringify(msg));
+        sendWebSocket(msg);
         this.dropCurrentXY();
     }
 
@@ -55,8 +56,8 @@ export default class Circle extends Tool {
         const img = new Image();
         img.src = this.savedImg;
         img.onload = () => {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.clearRect(0, 0, canvasState.canvas.width, canvasState.canvas.height);
+            this.ctx.drawImage(img, 0, 0, canvasState.canvas.width, canvasState.canvas.height);
             this.ctx.beginPath();
             this.ctx.arc(this.startX, this.startY, radius, 0, Math.PI * 2);
             this.ctx.fill();

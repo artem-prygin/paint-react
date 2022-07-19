@@ -14,16 +14,23 @@ const PORT = process.env.PORT || 5000;
 
 const connectionHandler = (ws, msg) => {
     ws.sessionID = msg.sessionID;
-    broadcastConnection(msg);
+    ws.userID = msg.userID;
+    ws.username = msg.username;
+
+    const message = {
+        ...msg,
+        isNew: true,
+    }
+    broadcastExceptOwner(message);
 };
 
-const broadcastConnection = (msg) => {
+const broadcastExceptOwner = (msg) => {
     wsServer.getWss().clients.forEach((client) => {
-        if (client.sessionID === msg.sessionID) {
+        if (client.sessionID === msg.sessionID && client.userID !== msg.userID) {
             client.send(JSON.stringify(msg));
         }
     });
-};
+}
 
 app.ws('/', (ws, req) => {
     ws.on('message', (msg) => {
@@ -38,11 +45,23 @@ app.ws('/', (ws, req) => {
             case 'connection':
                 connectionHandler(ws, parsedMsg);
                 break;
-            case 'draw':
-                broadcastConnection(parsedMsg);
+            default:
+                broadcastExceptOwner(parsedMsg);
                 break;
         }
     });
+
+    ws.on('close', () => {
+        const message = {
+            method: 'closedConnection',
+            username: ws.username,
+            userID: ws.userID,
+            sessionID: ws.sessionID,
+            isNew: false,
+        }
+
+        broadcastExceptOwner(message);
+    })
 
     ws.on('error', console.error);
 });

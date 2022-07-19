@@ -20,6 +20,6 @@ export const getImage = (canvas, sessionID) => {
 }
 
 export const saveImage = (image, sessionID) => {
-    axios.post(`http://localhost:5000/image?sessionID=${sessionID}`, { image })
+    axios.post(`${BASE_URL}/image?sessionID=${sessionID}`, { image })
         .catch(console.error);
 }

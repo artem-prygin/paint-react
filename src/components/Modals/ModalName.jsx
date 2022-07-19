@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/toolbar.scss';
-import canvasState from '../store/canvasState';
+import canvasState from '../../store/canvasState';
 import { Button, Modal } from 'react-bootstrap';
 import { useEffect } from 'react';
 

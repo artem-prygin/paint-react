@@ -1,8 +1,9 @@
 import Brush from './Brush.js';
+import { sendWebSocket } from '../api/websocket.js';
 
 export default class Eraser extends Brush {
-    constructor(canvas, socket, sessionID, mouseDown) {
-        super(canvas, socket, sessionID, mouseDown);
+    constructor(mouseDown) {
+        super(mouseDown);
         super.listen();
     }
 
@@ -10,14 +11,14 @@ export default class Eraser extends Brush {
         if (this.mouseDown) {
             const msg = {
                 method: 'draw',
-                sessionID: this.sessionID,
                 figure: {
                     type: 'eraser',
                     x: e.pageX - e.target.offsetLeft,
                     y: e.pageY - e.target.offsetTop,
                 },
             };
-            this.socket.send(JSON.stringify(msg));
+            this.draw(msg.figure.x, msg.figure.y);
+            sendWebSocket(msg);
         }
     }
 
@@ -29,9 +30,20 @@ export default class Eraser extends Brush {
         super.mouseUpHandler(e);
     }
 
+    draw(x, y) {
+        const currentStrokeStyle = this.ctx.strokeStyle;
+        this.ctx.lineTo(x, y);
+        this.ctx.strokeStyle = '#fff';
+        this.ctx.stroke();
+        this.ctx.strokeStyle = currentStrokeStyle;
+    }
+
     static staticDraw(ctx, figure) {
+        const currentStrokeStyle = ctx.strokeStyle;
         ctx.lineTo(figure.x, figure.y);
         ctx.strokeStyle = '#fff';
+        ctx.lineWidth = figure.lineWidth;
         ctx.stroke();
+        ctx.strokeStyle = currentStrokeStyle;
     }
 }

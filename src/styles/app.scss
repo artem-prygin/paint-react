@@ -32,3 +32,37 @@
 .pointer {
     cursor: pointer;
 }
+
+.bold {
+    font-weight: 700;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.new-user-flash {
+    right: 5px;
+    width: 250px;
+    color: #fff;
+    background: #bb2d3b;
+    padding: 10px;
+    z-index: 3;
+    animation: fadeOut 5s forwards;
+
+    &__new {
+        background: #198754;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .85;
+    }
+    100% {
+        opacity: 0;
+    }
+}

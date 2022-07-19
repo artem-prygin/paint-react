@@ -1,8 +1,9 @@
 import Tool from './Tool.js';
+import { sendWebSocket } from '../api/websocket.js';
 
 export default class Brush extends Tool {
-    constructor(canvas, socket, sessionID, mouseDown) {
-        super(canvas, socket, sessionID, mouseDown);
+    constructor(mouseDown) {
+        super(mouseDown);
         super.listen();
     }
 
@@ -10,14 +11,14 @@ export default class Brush extends Tool {
         if (this.mouseDown) {
             const msg = {
                 method: 'draw',
-                sessionID: this.sessionID,
                 figure: {
                     type: 'brush',
                     x: e.pageX - e.target.offsetLeft,
                     y: e.pageY - e.target.offsetTop,
                 },
             };
-            this.socket.send(JSON.stringify(msg));
+            this.draw(msg.figure.x, msg.figure.y);
+            sendWebSocket(msg);
         }
     }
 
@@ -34,16 +35,22 @@ export default class Brush extends Tool {
 
         const msg = {
             method: 'draw',
-            sessionID: this.sessionID,
             figure: {
                 type: 'finish',
             },
         };
-        this.socket.send(JSON.stringify(msg));
+        sendWebSocket(msg);
+    }
+
+    draw(x, y) {
+        this.ctx.lineTo(x, y);
+        this.ctx.stroke();
     }
 
     static staticDraw(ctx, figure) {
         ctx.lineTo(figure.x, figure.y);
+        ctx.strokeStyle = figure.strokeStyle;
+        ctx.lineWidth = figure.lineWidth;
         ctx.stroke();
     }
 }

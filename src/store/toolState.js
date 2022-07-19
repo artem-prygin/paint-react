@@ -4,7 +4,7 @@ class ToolState {
     tool = null;
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
     }
 
     setTool(tool) {

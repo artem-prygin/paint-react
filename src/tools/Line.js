@@ -1,8 +1,11 @@
 import Tool from './Tool.js';
+import { sendWebSocket } from '../api/websocket.js';
+import canvasState from '../store/canvasState.js';
+import toolState from '../store/toolState.js';
 
 export default class Line extends Tool {
-    constructor(canvas, socket, sessionID, mouseDown) {
-        super(canvas, socket, sessionID, mouseDown);
+    constructor(mouseDown) {
+        super(mouseDown);
         super.listen();
     }
 
@@ -20,7 +23,7 @@ export default class Line extends Tool {
         this.ctx.beginPath();
         this.startX = e.pageX - e.target.offsetLeft;
         this.startY = e.pageY - e.target.offsetTop;
-        this.savedImg = this.canvas.toDataURL();
+        this.savedImg = canvasState.canvas.toDataURL();
     }
 
     mouseUpHandler(e) {
@@ -34,7 +37,6 @@ export default class Line extends Tool {
 
         const msg = {
             method: 'draw',
-            sessionID: this.sessionID,
             figure: {
                 type: 'line',
                 startX: this.startX,
@@ -46,7 +48,8 @@ export default class Line extends Tool {
                 lineWidth: this.ctx.lineWidth,
             },
         };
-        this.socket.send(JSON.stringify(msg));
+
+        sendWebSocket(msg);
         this.dropCurrentXY();
     }
 
@@ -58,8 +61,8 @@ export default class Line extends Tool {
                 return;
             }
 
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.clearRect(0, 0, canvasState.canvas.width, canvasState.canvas.height);
+            this.ctx.drawImage(img, 0, 0, canvasState.canvas.width, canvasState.canvas.height);
             this.ctx.beginPath();
             this.ctx.moveTo(this.startX, this.startY);
             this.ctx.lineTo(this.currentX, this.currentY);
@@ -71,6 +74,8 @@ export default class Line extends Tool {
         ctx.beginPath();
         ctx.moveTo(figure.startX, figure.startY);
         ctx.lineTo(figure.x, figure.y);
+        ctx.strokeStyle = figure.strokeStyle;
+        ctx.lineWidth = figure.lineWidth;
         ctx.stroke();
     }
 }
