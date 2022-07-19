@@ -30,5 +30,5 @@ NOTE: Socket connection on demo project is available only 8-10 minutes and there
 ### Good luck and good bye!
 Author: Artem Prygin
 
-[![asciicast](https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Instagram.svg/32px-Instagram.svg.png)](https://www.instagram.com/gribgribych/)
+[![asciicast](https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Instagram.svg/32px-Instagram.svg.png)](https://www.instagram.com/grib_gribych/)
 [![asciicast](https://abiznews.net/wp-content/uploads/2022/03/telegram.png)](https://t.me/gribgribych/)
