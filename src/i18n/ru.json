@@ -12,5 +12,6 @@
   "HasLeft": "покинул нас",
   "LineWidth": "Ширина линии",
   "LineColor": "Цвет линии",
-  "FillColor": "Цвет заливки"
+  "FillColor": "Цвет заливки",
+  "ChatIsEmptyWriteYourFirstMessage": "Чат пустой. Напиши своё первое сообщение!"
 }

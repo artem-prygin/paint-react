@@ -38,6 +38,8 @@ const Chat = observer(() => {
     return (
         <div className="chat position-absolute">
             <div className="chat-box">
+                {chatMessagesState.chatMessages.length === 0 &&
+                    <span className="opacity-50 pointer-events-none">{t('ChatIsEmptyWriteYourFirstMessage')}</span>}
                 {chatMessagesState.chatMessages.map((msg, index, arr) => {
                     if (index === arr.length - 1) {
                         setTimeout(() => {

@@ -12,5 +12,6 @@
   "HasLeft": "has left",
   "LineWidth": "Line width",
   "LineColor": "Line color",
-  "FillColor": "Fill color"
+  "FillColor": "Fill color",
+  "ChatIsEmptyWriteYourFirstMessage": "Chat is empty. Write your first message!"
 }
