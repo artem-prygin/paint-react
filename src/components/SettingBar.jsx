@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import '../styles/toolbar.scss';
+import { useTranslation } from 'react-i18next';
 import toolState from '../store/toolState';
-import arrow from '../assets/arrow.svg';
 import canvasState from '../store/canvasState.js';
 import generalState from '../store/generalState.js';
 import * as apiRequests from '../api/api.js';
 import { sendWebSocket } from '../api/websocket.js';
 import ModalNewSession from './Modals/ModalNewSession.jsx';
-import { useTranslation } from 'react-i18next';
+import arrow from '../assets/arrow.svg';
+import '../styles/toolbar.scss';
 
 const SettingBar = () => {
     const [lineWidth, setLineWidth] = useState(1);

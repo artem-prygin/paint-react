@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import canvasState from '../../store/canvasState';
-import generalState from '../../store/generalState';
 import { Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import generalState from '../../store/generalState';
+import canvasState from '../../store/canvasState';
 
 const LOCALHOST = 'http://localhost:3000';
 const BASE_URL = process.env.NODE_ENV === 'production'

@@ -1,9 +1,9 @@
 import express from 'express';
+import WSServer from 'express-ws';
+import cors from 'cors';
 import * as path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import WSServer from 'express-ws';
-import cors from 'cors';
 
 const app = express();
 const wsServer = WSServer(app);

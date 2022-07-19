@@ -1,7 +1,6 @@
 import Tool from './Tool.js';
 import { sendWebSocket } from '../api/websocket.js';
 import canvasState from '../store/canvasState.js';
-import toolState from '../store/toolState.js';
 
 export default class Line extends Tool {
     constructor(mouseDown) {

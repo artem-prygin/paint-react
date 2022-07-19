@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/toolbar.scss';
-import toolState from '../store/toolState';
-import canvasState from '../store/canvasState';
+import { useTranslation } from 'react-i18next';
 import generalState from '../store/generalState';
+import canvasState from '../store/canvasState';
+import toolState from '../store/toolState';
 import Rect from '../tools/Rect.js';
 import Circle from '../tools/Circle.js';
 import Line from '../tools/Line.js';
+import Eraser from '../tools/Eraser.js';
+import Brush from '../tools/Brush.js';
 import { ReactComponent as BrushImg } from '../assets/images/brush.svg';
 import { ReactComponent as CircleImg } from '../assets/images/circle.svg';
 import { ReactComponent as RectImg } from '../assets/images/rect.svg';
@@ -16,9 +18,7 @@ import { ReactComponent as RedoImg } from '../assets/images/redo.svg';
 import { ReactComponent as SaveImg } from '../assets/images/save.svg';
 import ru from '../assets/flags/ru.png';
 import uk from '../assets/flags/uk.png';
-import Eraser from '../tools/Eraser.js';
-import Brush from '../tools/Brush.js';
-import { useTranslation } from 'react-i18next';
+import '../styles/toolbar.scss';
 
 
 const Toolbar = () => {

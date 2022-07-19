@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
-import '../styles/chat.scss';
-import chatMessagesState from '../store/chatMessagesState.js';
-import { sendWebSocket } from '../api/websocket.js';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
+import { sendWebSocket } from '../api/websocket.js';
 import generalState from '../store/generalState.js';
+import chatMessagesState from '../store/chatMessagesState.js';
+import '../styles/chat.scss';
 
 const Chat = observer(() => {
     const [sendMsgDisabled, setSendMsgDisabled] = useState(true);

@@ -1,13 +1,13 @@
 import React from 'react';
-import Toolbar from './Toolbar';
-import Canvas from './Canvas';
-import SettingBar from './SettingBar';
-import ModalName from './Modals/ModalName.jsx';
 import { useParams } from 'react-router-dom';
-import generalState from '../store/generalState.js';
-import Chat from './Chat.jsx';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
+import generalState from '../store/generalState.js';
+import ModalName from './Modals/ModalName.jsx';
+import Toolbar from './Toolbar.jsx';
+import SettingBar from './SettingBar.jsx';
+import Chat from './Chat.jsx';
+import Canvas from './Canvas.jsx';
 
 const Content = observer(() => {
     const { sessionID } = useParams();

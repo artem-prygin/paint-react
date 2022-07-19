@@ -1,11 +1,10 @@
 import React from 'react';
-import './styles/app.scss';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Content from './components/Content';
+import './styles/app.scss';
 
 const App = () => {
     const sessionID = localStorage.getItem('sessionID');
-
 
     return (
         <BrowserRouter>

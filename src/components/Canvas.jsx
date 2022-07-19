@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import '../styles/canvas.scss';
 import { observer } from 'mobx-react-lite';
 import canvasState from '../store/canvasState';
 import generalState from '../store/generalState';
@@ -7,6 +6,7 @@ import toolState from '../store/toolState';
 import * as apiRequests from '../api/api.js';
 import { openWebSocket } from '../api/websocket.js';
 import Brush from '../tools/Brush.js';
+import '../styles/canvas.scss';
 
 const Canvas = observer(() => {
     const canvasRef = useRef();

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import generalState from '../../store/generalState';
 import { Button, Modal } from 'react-bootstrap';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import generalState from '../../store/generalState';
 
 const ModalName = () => {
     const [modalVisibility, setModalVisibility] = useState(true);
